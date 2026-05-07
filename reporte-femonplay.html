@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FemonPlay | Reporte de Canales</title>
+    <style>
+        :root {
+            color-scheme: dark;
+            --bg-gradient-start: #0d0d12;
+            --bg-gradient-end: #1c1c28;
+            --card-bg: rgba(24, 24, 34, 0.92);
+            --accent: #7b6cff;
+            --accent-hover: #9a8cff;
+            --text-primary: #f7f7ff;
+            --text-secondary: #b8b8d9;
+            --border-color: rgba(123, 108, 255, 0.25);
+            --error: #ff6b6b;
+            --success: #48c774;
+            --input-bg: rgba(255, 255, 255, 0.05);
+            --input-border: rgba(255, 255, 255, 0.08);
+            --shadow: 0 18px 48px rgba(0, 0, 0, 0.35);
+            --transition: 0.24s ease;
+            font-family: "Inter", "Segoe UI", sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: radial-gradient(circle at top, var(--bg-gradient-start), var(--bg-gradient-end));
+            color: var(--text-primary);
+            padding: 1.5rem;
+        }
+
+        header {
+            width: 100%;
+            max-width: 920px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            margin-bottom: 2rem;
+            gap: 1rem;
+        }
+
+        header h1 {
+            font-size: clamp(1.9rem, 3vw, 2.6rem);
+            margin: 0;
+            letter-spacing: 0.04em;
+        }
+
+        header h2 {
+            font-size: clamp(1.4rem, 2.4vw, 2.1rem);
+            margin: 0;
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        header p {
+            margin: 0;
+            color: var(--text-secondary);
+            max-width: 560px;
+            line-height: 1.6;
+        }
+
+        main {
+            width: 100%;
+            max-width: 920px;
+        }
+
+        form {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: clamp(1.5rem, 3vw, 2.5rem);
+            box-shadow: var(--shadow);
+        }
+
+        .section-title {
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: var(--text-secondary);
+            margin: 0 0 1rem;
+        }
+
+        .selector-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .selector-option {
+            position: relative;
+        }
+
+        .selector-option input {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .selector-option label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.85rem 1.2rem;
+            border-radius: 14px;
+            border: 1px solid transparent;
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-secondary);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .selector-option input:focus + label {
+            outline: 2px solid var(--accent);
+            outline-offset: 4px;
+        }
+
+        .selector-option input:checked + label,
+        .selector-option label:hover {
+            background: rgba(123, 108, 255, 0.18);
+            color: var(--text-primary);
+            border-color: rgba(123, 108, 255, 0.45);
+            box-shadow: 0 0 0 1px rgba(123, 108, 255, 0.2);
+        }
+
+        .form-grid {
+            display: grid;
+            gap: 1.2rem;
+        }
+
+        @media (min-width: 720px) {
+            .form-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .form-grid .full-width {
+                grid-column: 1 / -1;
+            }
+        }
+
+        .form-field {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .form-field label {
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        .form-field input,
+        .form-field textarea,
+        .form-field select {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border-radius: 12px;
+            border: 1px solid var(--input-border);
+            background: var(--input-bg);
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .form-field textarea {
+            min-height: 140px;
+            resize: vertical;
+        }
+
+        .form-field input::placeholder,
+        .form-field textarea::placeholder {
+            color: rgba(255, 255, 255, 0.35);
+        }
+
+        .form-field input:focus,
+        .form-field textarea:focus,
+        .form-field select:focus {
+            border-color: rgba(123, 108, 255, 0.6);
+            box-shadow: 0 0 0 4px rgba(123, 108, 255, 0.18);
+            outline: none;
+        }
+
+        .helper-text {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .error-message {
+            font-size: 0.8rem;
+            color: var(--error);
+            min-height: 1em;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .actions {
+            margin-top: 2rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+
+        button {
+            border-radius: 12px;
+            padding: 0.85rem 1.6rem;
+            font-size: 1rem;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent), #5a4bff);
+            color: #fff;
+            box-shadow: 0 12px 32px rgba(123, 108, 255, 0.35);
+        }
+
+        .btn-primary:hover,
+        .btn-primary:focus {
+            background: linear-gradient(135deg, var(--accent-hover), #7365ff);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            color: var(--text-secondary);
+        }
+
+        .btn-secondary:hover,
+        .btn-secondary:focus {
+            border-color: rgba(255, 255, 255, 0.55);
+            color: var(--text-primary);
+        }
+
+        .toast {
+            position: fixed;
+            inset: auto 1.5rem 1.5rem auto;
+            background: rgba(72, 199, 116, 0.12);
+            color: var(--success);
+            border: 1px solid rgba(72, 199, 116, 0.45);
+            padding: 0.9rem 1.3rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: var(--transition);
+            pointer-events: none;
+            max-width: 320px;
+            font-weight: 600;
+        }
+
+        .toast.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        footer {
+            margin-top: 3rem;
+            color: rgba(255, 255, 255, 0.35);
+            font-size: 0.85rem;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Femon Play Reportes</h1>
+        <h2>Formulario de Reporte de Canales</h2>
+        <p>
+            Ayúdanos a mantener la mejor experiencia en FemonPlay reportando cualquier
+            inconveniente con nuestros canales de TV, películas o series.
+        </p>
+    </header>
+    <main>
+        <form id="reporteForm" action="https://docs.google.com/forms/d/e/1FAIpQLSfV-iDRudF8uVwWBRomq-Ab8sXx16pAUkNNUwdbJy6uUZh4dQ/formResponse" method="POST" target="hidden_iframe" novalidate>
+            <h2 class="section-title">¿Qué desea reportar?</h2>
+            <div class="selector-group" role="radiogroup" aria-label="Tipo de contenido a reportar">
+                <div class="selector-option">
+                    <input type="radio" name="entry.1876072779" id="tipoTV" value="TV" checked />
+                    <label for="tipoTV">TV</label>
+                </div>
+                <div class="selector-option">
+                    <input type="radio" name="entry.1876072779" id="tipoPeliculas" value="Películas" />
+                    <label for="tipoPeliculas">Películas</label>
+                </div>
+                <div class="selector-option">
+                    <input type="radio" name="entry.1876072779" id="tipoSeries" value="Series" />
+                    <label for="tipoSeries">Series</label>
+                </div>
+            </div>
+
+            <div class="form-grid" id="dynamicFields">
+                <div class="form-field full-width" data-section="TV" data-field="tvFolder">
+                    <label for="tvFolder">Introduzca el nombre de la carpeta</label>
+                    <input type="text" id="tvFolder" name="entry.903436442" placeholder="Ej. Deportes" required />
+                    <p class="helper-text">Carpeta o categoría donde se encuentra el canal.</p>
+                    <p class="error-message" aria-live="polite"></p>
+                </div>
+                <div class="form-field full-width" data-field="channelName">
+                    <label for="channelName">Nombre del canal</label>
+                    <input type="text" id="channelName" name="entry.1806422781" placeholder="Ej. FemonPlay Sports" required />
+                    <p class="helper-text">Canal específico asociado al reporte.</p>
+                    <p class="error-message" aria-live="polite"></p>
+                </div>
+
+                <div class="form-field full-width hidden" data-section="Películas" data-field="movieFolder">
+                    <label for="movieFolder">Introduzca la carpeta o género de la película</label>
+                    <input type="text" id="movieFolder" name="entry.903436442" placeholder="Ej. Acción" />
+                    <p class="helper-text">Género o carpeta donde se encuentra la película.</p>
+                    <p class="error-message" aria-live="polite"></p>
+                </div>
+                <div class="form-field full-width hidden" data-section="Películas" data-field="movieTitle">
+                    <label for="movieTitle">Introduzca el título de la película</label>
+                    <input type="text" id="movieTitle" name="entry_peli_titulo" placeholder="Ej. La Gran Aventura" />
+                    <p class="helper-text">Título exacto o aproximado de la película afectada.</p>
+                    <p class="error-message" aria-live="polite"></p>
+                </div>
+
+                <div class="form-field full-width hidden" data-section="Series" data-field="seriesFolder">
+                    <label for="seriesFolder">Introduzca la carpeta o género de la serie</label>
+                    <input type="text" id="seriesFolder" name="entry.903436442" placeholder="Ej. Drama" />
+                    <p class="helper-text">Categoría o carpeta donde se ubica la serie.</p>
+                    <p class="error-message" aria-live="polite"></p>
+                </div>
+                <div class="form-field full-width hidden" data-section="Series" data-field="seriesTitle">
+                    <label for="seriesTitle">Introduzca el título de la serie</label>
+                    <input type="text" id="seriesTitle" name="entry_serie_titulo" placeholder="Ej. Historias de Medianoche" />
+                    <p class="helper-text">Título de la serie con el inconveniente.</p>
+                    <p class="error-message" aria-live="polite"></p>
+                </div>
+
+                <div class="form-field" data-field="clientName">
+                    <label for="clientName">Nombre del cliente</label>
+                    <input type="text" id="clientName" name="entry.852613183" placeholder="Tu nombre completo" required />
+                    <p class="error-message" aria-live="polite"></p>
+                </div>
+                <div class="form-field" data-field="contact">
+                    <label for="contact">Contacto (WhatsApp/Email)</label>
+                    <input type="text" id="contact" name="entry.125660309" placeholder="Ej. +58 000 0000000 / correo@ejemplo.com" required />
+                    <p class="error-message" aria-live="polite"></p>
+                </div>
+                <div class="form-field full-width" data-field="description">
+                    <label for="description">Descripción breve del problema</label>
+                    <textarea id="description" name="entry.1489851661" placeholder="Cuéntanos qué sucede con el contenido" required></textarea>
+                    <p class="error-message" aria-live="polite"></p>
+                </div>
+                <div class="form-field" data-field="severity">
+                    <label for="severity">Severidad</label>
+                    <select id="severity" name="entry.2095474075" required>
+                        <option value="">Selecciona una opción</option>
+                        <option value="Baja">Baja</option>
+                        <option value="Media">Media</option>
+                        <option value="Alta">Alta</option>
+                    </select>
+                    <p class="error-message" aria-live="polite"></p>
+                </div>
+            </div>
+
+            <div class="actions">
+                <button type="submit" class="btn-primary" id="submitBtn">Enviar reporte</button>
+                <button type="reset" class="btn-secondary">Limpiar</button>
+            </div>
+        </form>
+        <iframe name="hidden_iframe" style="display:none"></iframe>
+    </main>
+
+    <div class="toast" id="toast" role="status" aria-live="polite">Reporte enviado con éxito. ¡Gracias por tu ayuda!</div>
+
+    <footer>
+        © FemonPlay – Reporte de Canales
+    </footer>
+
+    <script>
+        const fieldNames = {
+            tvFolder: "entry.903436442",
+            channelName: "entry.1806422781",
+            movieFolder: "entry.903436442",
+            movieTitle: "entry_peli_titulo",
+            seriesFolder: "entry.903436442",
+            seriesTitle: "entry_serie_titulo",
+            clientName: "entry.852613183",
+            contact: "entry.125660309",
+            description: "entry.1489851661",
+            severity: "entry.2095474075"
+        };
+
+        const form = document.getElementById("reporteForm");
+        const dynamicFields = document.querySelectorAll("[data-section]");
+        const radioInputs = document.querySelectorAll('input[name="entry.1876072779"]');
+        const toast = document.getElementById("toast");
+        const submitBtn = document.getElementById("submitBtn");
+        let allowSubmit = false;
+
+        const sectionRequirements = {
+            TV: ["tvFolder"],
+            "Películas": ["movieFolder", "movieTitle"],
+            Series: ["seriesFolder", "seriesTitle"]
+        };
+
+        function getFieldByKey(key) {
+            return form.querySelector(`[data-field="${key}"]`);
+        }
+
+        function updateVisibleFields(selected) {
+            dynamicFields.forEach((field) => {
+                const shouldShow = field.dataset.section === selected || !field.dataset.section;
+                field.classList.toggle("hidden", !shouldShow);
+                const input = field.querySelector("input, textarea, select");
+                if (!input) return;
+                if (field.dataset.section) {
+                    const isRequired = sectionRequirements[selected]?.includes(field.dataset.field);
+                    if (isRequired) {
+                        input.setAttribute("required", "required");
+                    } else {
+                        input.removeAttribute("required");
+                        input.value = "";
+                        field.querySelector(".error-message").textContent = "";
+                    }
+                }
+            });
+        }
+
+        function showError(fieldWrapper, message) {
+            const error = fieldWrapper.querySelector(".error-message");
+            if (error) {
+                error.textContent = message;
+            }
+        }
+
+        function clearErrors() {
+            form.querySelectorAll(".error-message").forEach((error) => {
+                error.textContent = "";
+            });
+        }
+
+        function validateForm() {
+            const selectedType = form.querySelector('input[name="entry.1876072779"]:checked').value;
+            let isValid = true;
+            clearErrors();
+
+            const requiredKeys = [
+                "channelName",
+                ...sectionRequirements[selectedType],
+                "clientName",
+                "contact",
+                "description",
+                "severity"
+            ];
+
+            requiredKeys.forEach((key) => {
+                const fieldWrapper = getFieldByKey(key);
+                if (!fieldWrapper) return;
+                const input = fieldWrapper.querySelector("input, textarea, select");
+                if (!input) return;
+                const value = input.value.trim();
+                if (!value) {
+                    isValid = false;
+                    input.classList.add("invalid");
+                    showError(fieldWrapper, "Este campo es obligatorio.");
+                } else {
+                    input.classList.remove("invalid");
+                }
+            });
+
+            return isValid;
+        }
+
+        function showToast(message) {
+            toast.textContent = message;
+            toast.classList.add("visible");
+            setTimeout(() => {
+                toast.classList.remove("visible");
+            }, 3800);
+        }
+
+        radioInputs.forEach((radio) => {
+            radio.addEventListener("change", (event) => {
+                updateVisibleFields(event.target.value);
+            });
+        });
+
+        form.addEventListener("reset", () => {
+            setTimeout(() => {
+                updateVisibleFields(form.querySelector('input[name="entry.1876072779"]:checked').value);
+                clearErrors();
+            }, 0);
+        });
+
+        form.addEventListener("submit", (event) => {
+            if (!allowSubmit) {
+                event.preventDefault();
+                const isValid = validateForm();
+
+                if (isValid) {
+                    submitBtn.disabled = true;
+                    submitBtn.textContent = "Enviando…";
+                    showToast("Enviando reporte…");
+
+                    setTimeout(() => {
+                        allowSubmit = true;
+                        submitBtn.textContent = "Enviar reporte";
+                        submitBtn.disabled = false;
+                        showToast("Reporte enviado con éxito. ¡Gracias por tu ayuda!");
+                        form.submit();
+                    }, 600);
+                }
+            } else {
+                allowSubmit = false;
+            }
+        });
+
+        // Opción B: Envío manual mediante fetch (descomentar y ajustar según Apps Script)
+        // form.addEventListener("submit", async (event) => {
+        //     event.preventDefault();
+        //     if (!validateForm()) return;
+        //
+        //     submitBtn.disabled = true;
+        //     const originalLabel = submitBtn.textContent;
+        //     submitBtn.textContent = "Enviando…";
+        //     showToast("Enviando reporte…");
+        //
+        //     const formData = new FormData(form);
+        //     const body = new URLSearchParams(formData).toString();
+        //
+        //     try {
+        //         const response = await fetch("YOUR_GOOGLE_ENDPOINT", {
+        //             method: "POST",
+        //             headers: {
+        //                 "Content-Type": "application/x-www-form-urlencoded"
+        //             },
+        //             body
+        //         });
+        //
+        //         if (!response.ok) {
+        //             throw new Error("Error en la solicitud");
+        //         }
+        //
+        //         form.reset();
+        //         showToast("Reporte enviado con éxito. ¡Gracias por tu ayuda!");
+        //     } catch (error) {
+        //         showToast("Hubo un error al enviar el reporte. Intente nuevamente.");
+        //     } finally {
+        //         submitBtn.disabled = false;
+        //         submitBtn.textContent = originalLabel;
+        //     }
+        // });
+
+        updateVisibleFields("TV");
+    </script>
+</body>
+</html>

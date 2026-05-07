@@ -1,0 +1,1445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Usuarios Creados</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+    :root {
+      color-scheme: dark;
+      --bg-primary: #050924;
+      --bg-secondary: #0b133d;
+      --card-bg: rgba(12, 18, 64, 0.88);
+      --card-border: rgba(255, 255, 255, 0.12);
+      --text-primary: #f5f7ff;
+      --text-muted: rgba(245, 247, 255, 0.72);
+      --accent: #f5c000;
+      --accent-strong: #ffe36d;
+      --info: #4cc9ff;
+      --warning: #ff914d;
+      --danger: #ff6b6b;
+      --success: #4ade80;
+      --surface-soft: rgba(11, 17, 58, 0.72);
+      --shadow-card: 0 25px 60px rgba(5, 12, 55, 0.45);
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      min-height: 100%;
+      font-family: 'Poppins', 'Segoe UI', sans-serif;
+      background: radial-gradient(circle at top, #101a52 0%, #070b2e 55%, #050724 100%);
+      color: var(--text-primary);
+      user-select: none;
+      -webkit-text-size-adjust: 100%;
+    }
+
+    textarea { user-select: text; }
+
+    button, input {
+      font: inherit;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+    }
+
+    #buscarCorreo { -webkit-tap-highlight-color: transparent; }
+
+    .background {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+    }
+
+    .shape {
+      position: absolute;
+      width: clamp(260px, 28vw, 360px);
+      height: clamp(260px, 28vw, 360px);
+      border-radius: 50%;
+      background: radial-gradient(circle at center, rgba(245, 192, 0, 0.42), transparent 70%);
+      filter: blur(42px);
+      opacity: 0.6;
+    }
+
+    .shape:nth-child(1) {
+      top: 8%;
+      left: 6%;
+    }
+
+    .shape:nth-child(2) {
+      bottom: 10%;
+      right: 8%;
+      background: radial-gradient(circle at center, rgba(76, 201, 255, 0.42), transparent 70%);
+    }
+
+    .card {
+      position: relative;
+      max-width: 1040px;
+      margin: clamp(1.5rem, 4vw, 3rem) auto;
+      background: linear-gradient(155deg, rgba(17, 25, 74, 0.92), rgba(7, 11, 46, 0.88));
+      border-radius: 24px;
+      padding: clamp(1.5rem, 3vw, 2.5rem);
+      border: 1px solid var(--card-border);
+      box-shadow: var(--shadow-card);
+      color: var(--text-primary);
+    }
+
+    .receipt-banner {
+      margin: clamp(1rem, 2vw, 1.5rem) auto;
+      padding: clamp(0.9rem, 1.5vw, 1.3rem) clamp(1.1rem, 2vw, 1.6rem);
+      border-radius: 18px;
+      background: rgba(12, 18, 64, 0.72);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.75rem;
+      text-align: center;
+    }
+
+    .receipt-banner[hidden] {
+      display: none;
+    }
+
+    .receipt-banner button {
+      border: none;
+      border-radius: 999px;
+      padding: 0.7rem 1.6rem;
+      font-weight: 600;
+      font-size: clamp(0.95rem, 0.5vw + 0.85rem, 1.05rem);
+      cursor: pointer;
+      background: linear-gradient(145deg, var(--accent-strong), var(--accent));
+      color: #1b1600;
+      box-shadow: 0 12px 24px rgba(245, 192, 0, 0.32);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .receipt-banner button:hover,
+    .receipt-banner button:focus-visible {
+      transform: translateY(-1px);
+      box-shadow: 0 20px 34px rgba(245, 192, 0, 0.42);
+      outline: none;
+    }
+
+    .receipt-banner p {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: 0.92rem;
+    }
+
+    h1 {
+      text-align: center;
+      margin: 0 0 1.25rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      font-size: clamp(1.5rem, 1.2vw + 1.25rem, 2.1rem);
+    }
+
+    .filtros {
+      margin: 1.5rem 0 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      white-space: nowrap;
+      -webkit-overflow-scrolling: touch;
+      padding-bottom: 0.35rem;
+      justify-content: center;
+    }
+
+    .filtros button {
+      padding-block: clamp(0.65rem, 1.1vw, 0.85rem);
+      padding-inline: clamp(1rem, 2.4vw, 1.35rem);
+      min-height: 46px;
+      min-width: 46px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      background: linear-gradient(145deg, var(--accent-strong), var(--accent));
+      color: #1b1600;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+      flex: 0 0 auto;
+      font-size: clamp(0.9rem, 0.6vw + 0.75rem, 1.05rem);
+      box-shadow: 0 12px 24px rgba(245, 192, 0, 0.32);
+    }
+
+    .filtros button:hover,
+    .filtros button:focus-visible {
+      transform: translateY(-1px);
+      box-shadow: 0 18px 34px rgba(245, 192, 0, 0.42);
+      outline: none;
+    }
+
+    .filtros button.active {
+      filter: brightness(1.08);
+    }
+
+    #btnTodos { background: linear-gradient(145deg, rgba(255, 255, 255, 0.92), rgba(245, 247, 255, 0.8)); color: #10143b; }
+    #btnActivos { background: linear-gradient(145deg, var(--info), #2196f3); color: #031d35; }
+    #btnPorVencer { background: linear-gradient(145deg, var(--accent-strong), #ffb347); color: #2b1900; }
+    #btnVencidos { background: linear-gradient(145deg, #ff8a8a, var(--danger)); color: #3f0404; }
+    #btnDemo { background: linear-gradient(145deg, #6ffacc, #2dd4bf); color: #022b1f; }
+
+    #mesVencidos,
+    #diaVencidos {
+      display: none;
+      margin-left: 0.65em;
+      padding: 0.6em 0.9em;
+      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      background: rgba(9, 15, 58, 0.65);
+      color: var(--text-primary);
+      min-height: 46px;
+      font-size: clamp(0.95rem, 0.4vw + 0.85rem, 1rem);
+      flex: 0 0 auto;
+    }
+
+    #buscarCorreo {
+      width: 100%;
+      max-width: 640px;
+      display: block;
+      margin: 0 auto 1.25rem;
+      padding: 0.85em 1.1em;
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      background: rgba(10, 16, 56, 0.6);
+      color: var(--text-primary);
+      min-height: 48px;
+      font-size: clamp(1rem, 0.6vw + 0.9rem, 1.15rem);
+      outline: none;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    #buscarCorreo::placeholder {
+      color: rgba(245, 247, 255, 0.45);
+    }
+
+    #buscarCorreo:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 4px rgba(245, 192, 0, 0.25);
+    }
+
+    #listaUsuarios { margin-top: 1.2rem; }
+
+    .usuario {
+      background: var(--surface-soft);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-left: 6px solid transparent;
+      border-radius: 18px;
+      padding: 0.95em 1.2em;
+      margin-bottom: 0.85em;
+      box-shadow: 0 8px 22px rgba(5, 12, 55, 0.28);
+      color: var(--text-primary) !important;
+    }
+
+    .usuario * { color: inherit !important; }
+
+    .usuario p {
+      margin: 0.2em 0 !important;
+      line-height: 1.25 !important;
+    }
+
+    .usuario.vencido { border-left-color: var(--danger); }
+    .usuario.por-vencer { border-left-color: var(--warning); }
+
+    .user-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 0.5em 1.2em;
+    }
+
+    .user-details {
+      display: grid;
+      grid-auto-flow: row;
+      row-gap: 0.35em;
+      min-width: 260px;
+      font-size: clamp(0.95rem, 0.4vw + 0.85rem, 1rem);
+    }
+
+    .user-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45em;
+      align-items: center;
+      justify-content: flex-end;
+      min-width: 220px;
+      justify-self: end;
+    }
+
+    .user-actions button {
+      padding: 0.65em 1em;
+      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(10, 16, 56, 0.75);
+      color: var(--text-primary) !important;
+      cursor: pointer;
+      font-size: clamp(0.95rem, 0.3vw + 0.85rem, 1rem);
+      min-height: 44px;
+      min-width: 44px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+
+    .user-actions button:hover,
+    .user-actions button:focus-visible {
+      transform: translateY(-1px);
+      box-shadow: 0 12px 24px rgba(6, 14, 56, 0.35);
+      outline: none;
+      border-color: rgba(255, 255, 255, 0.28);
+    }
+
+    .user-actions .accent {
+      background: linear-gradient(145deg, var(--info), #2a7ffe);
+      color: #031d35 !important;
+    }
+
+    .user-actions .danger {
+      background: linear-gradient(145deg, #ff8585, var(--danger));
+      color: #320303 !important;
+    }
+
+    .user-actions .ghost {
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text-primary) !important;
+    }
+
+    .dot-demo {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--success);
+      box-shadow: 0 0 0 2px rgba(74, 222, 128, 0.25);
+    }
+
+    .tag {
+      display: inline-block;
+      font-size: 0.75rem;
+      padding: 0.2em 0.65em;
+      border-radius: 999px;
+      background: rgba(245, 247, 255, 0.1);
+      color: var(--text-primary) !important;
+      margin-left: 0.35em;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+    }
+
+    .tag.locked {
+      background: rgba(255, 180, 102, 0.1);
+      color: #ffd0a8 !important;
+      border-color: rgba(255, 180, 102, 0.32);
+    }
+
+    .menu-contextual {
+      position: fixed;
+      z-index: 9999;
+      background: rgba(11, 16, 58, 0.96);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 20px;
+      padding: 0.65em;
+      width: clamp(240px, 85vw, 320px);
+      max-width: calc(100vw - 24px);
+      max-height: min(80vh, 440px);
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior: contain;
+      touch-action: pan-y;
+      box-shadow: 0 22px 48px rgba(5, 12, 55, 0.5);
+      backdrop-filter: blur(18px);
+      animation: pop 0.12s ease-out;
+      color: var(--text-primary);
+    }
+
+    @keyframes pop {
+      from { transform: scale(0.97); opacity: 0.8; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .menu-contextual { animation: none !important; }
+    }
+
+    .menu-contextual h4 {
+      font-size: 0.95rem;
+      margin: 0.25em 0.35em 0.6em;
+      font-weight: 600;
+      color: var(--text-muted) !important;
+    }
+
+    .menu-contextual .group {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.45em;
+      margin-bottom: 0.6em;
+    }
+
+    .menu-contextual button {
+      padding: 0.7em 0.9em;
+      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(13, 20, 66, 0.82);
+      color: var(--text-primary) !important;
+      cursor: pointer;
+      font-size: clamp(0.95rem, 0.3vw + 0.85rem, 1rem);
+      min-height: 44px;
+      min-width: 44px;
+      text-align: left;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+
+    .menu-contextual button:hover,
+    .menu-contextual button:focus-visible {
+      transform: translateY(-1px);
+      box-shadow: 0 12px 24px rgba(6, 14, 56, 0.35);
+      outline: none;
+      border-color: rgba(255, 255, 255, 0.25);
+    }
+
+    .menu-contextual .accent {
+      background: linear-gradient(145deg, var(--info), #2a7ffe);
+      color: #031d35 !important;
+    }
+
+    .menu-contextual .danger {
+      background: linear-gradient(145deg, #ff8585, var(--danger));
+      color: #320303 !important;
+    }
+
+    @media (max-width: 720px) {
+      .card { margin: 1.25rem 0.75rem; padding: 1.35rem; }
+      .filtros { gap: 0.5em; justify-content: flex-start; }
+      .filtros button { font-size: 1rem; }
+      #buscarCorreo { font-size: 1rem; }
+      .user-row { grid-template-columns: 1fr; gap: 0.55em; }
+      .user-actions { justify-self: start; justify-content: flex-start; }
+      .menu-contextual .group { grid-template-columns: 1fr; }
+      .menu-contextual { width: calc(100vw - 24px); max-width: none; }
+    }
+
+    button:disabled { opacity: 0.5; cursor: not-allowed; }
+  </style>
+
+</head>
+<body>
+  <div class="background">
+    <div class="shape"></div>
+    <div class="shape"></div>
+  </div>
+
+  <div class="card">
+    <h1>Usuarios Creados</h1>
+
+    <div id="renewalReceipt" class="receipt-banner" hidden>
+      <p id="receiptMessage">Se generó un comprobante para la última renovación.</p>
+      <button type="button" id="btnVerComprobante">Ver comprobante</button>
+    </div>
+
+    <div class="filtros">
+      <button id="btnTodos" class="active">Todos</button>
+      <button id="btnActivos">Activos</button>
+      <button id="btnPorVencer">Por vencer</button>
+      <button id="btnVencidos">Vencidos</button>
+      <button id="btnDemo">Demo</button>
+      <input type="month" id="mesVencidos" title="Filtrar mes de cuentas vencidas" />
+      <input type="number" id="diaVencidos" min="1" max="31" placeholder="Día" title="Filtrar día de cuentas vencidas" />
+    </div>
+
+    <input type="text" id="buscarCorreo" placeholder="Buscar por correo electrónico" />
+
+    <div id="listaUsuarios"></div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    import { getDatabase, ref, get, update, remove, runTransaction, set } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyADcEYKamrewxL8CDA8NmAuRZjp8eZ2XzY",
+    authDomain: "femon-play.firebaseapp.com",
+    databaseURL: "femon-play-default-rtdb.firebaseio.com",
+    projectId: "femon-play",
+    storageBucket: "femon-play.firebasestorage.app",
+    messagingSenderId: "887768250224",
+    appId: "1:63456783638:android:1e18d5484b58fc1411f437"
+};
+
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const database = getDatabase(app);
+
+    const listaUsuarios = document.getElementById("listaUsuarios");
+    const buscarCorreo = document.getElementById("buscarCorreo");
+    const btnTodos = document.getElementById("btnTodos");
+    const btnActivos = document.getElementById("btnActivos");
+    const btnPorVencer = document.getElementById("btnPorVencer");
+    const btnVencidos = document.getElementById("btnVencidos");
+    const btnDemo = document.getElementById("btnDemo");
+    const mesVencidos = document.getElementById("mesVencidos");
+    const diaVencidos = document.getElementById("diaVencidos");
+    const receiptBanner = document.getElementById("renewalReceipt");
+    const receiptMessage = document.getElementById("receiptMessage");
+    const receiptButton = document.getElementById("btnVerComprobante");
+
+    const filtrosDisponibles = {
+      todos: btnTodos,
+      activos: btnActivos,
+      porVencer: btnPorVencer,
+      vencidos: btnVencidos,
+      demo: btnDemo
+    };
+
+    const filtroPorBoton = {
+      btnTodos: "todos",
+      btnActivos: "activos",
+      btnPorVencer: "porVencer",
+      btnVencidos: "vencidos",
+      btnDemo: "demo"
+    };
+
+    let adminUID = null;
+    let usuariosData = [];
+    let filtroActual = "todos";
+    let ultimoComprobante = null;
+
+    if (receiptButton) {
+      receiptButton.addEventListener("click", () => abrirComprobante());
+    }
+
+    function confirmarAccion(mensaje) {
+      return window.confirm(`Mensaje de confirmación\n\n${mensaje}`);
+    }
+
+    function actualizarHash(filtro) {
+      const baseUrl = window.location.pathname + window.location.search;
+      if (typeof history.replaceState === "function") {
+        if (filtro === "todos") {
+          history.replaceState(null, "", baseUrl);
+        } else {
+          history.replaceState(null, "", `${baseUrl}#${filtro}`);
+        }
+      } else if (filtro === "todos") {
+        window.location.hash = "";
+      } else {
+        window.location.hash = filtro;
+      }
+    }
+
+    function normalizarFiltro(valor) {
+      return (valor || "").toString().toLowerCase().replace(/[^a-z]/g, "");
+    }
+
+    function obtenerFiltroDesdeUrl() {
+      const hash = normalizarFiltro(window.location.hash.replace("#", ""));
+      const params = new URLSearchParams(window.location.search);
+      const query = normalizarFiltro(params.get("filter") || params.get("filtro"));
+      const preferido = hash || query;
+      if (preferido === "activos") return "activos";
+      if (preferido === "porvencer") return "porVencer";
+      if (preferido === "vencidos") return "vencidos";
+      if (preferido === "demo") return "demo";
+      if (preferido === "todos") return "todos";
+      return "";
+    }
+
+    function aplicarFiltroDesdeUrl(force = false) {
+      if (!usuariosData.length) return;
+      const filtro = obtenerFiltroDesdeUrl();
+      if (!filtro) return;
+      const btn = filtrosDisponibles[filtro];
+      if (!btn) return;
+      const activo = document.querySelector(".filtros button.active");
+      if (activo?.id === btn.id) {
+        if (force) {
+          renderUsuarios(filtro);
+        }
+        return;
+      }
+      btn.click();
+    }
+
+    onAuthStateChanged(auth, user => {
+      if (user) {
+        adminUID = user.uid;
+        window.adminUID = adminUID;   // ← añade esto
+        cargarUsuarios();
+        // ========== PEGA ESTE CÓDIGO DE PRUEBA AQUÍ ==========
+        console.log("--- INICIANDO PRUEBA DE LECTURA DE CRÉDITOS ---");
+        console.log("Intentando leer créditos para el Admin UID:", adminUID);
+        const rutaDeCreditos = `Admin/${adminUID}/limiteUsuarios`;
+        console.log("Ruta exacta que se está leyendo:", rutaDeCreditos);
+        
+        const creditosRef = ref(database, rutaDeCreditos);
+        get(creditosRef).then((snapshot) => {
+            if (snapshot.exists()) {
+                console.log("✅ ¡ÉXITO! Se encontró el dato. Valor:", snapshot.val());
+            } else {
+                console.error("❌ ¡FALLO! No se encontró ningún dato en la ruta especificada.");
+                console.log("Verifica que la ruta y el UID sean 100% correctos y que no haya problemas de permisos.");
+            }
+        }).catch((error) => {
+            console.error("❌ ¡ERROR DE CONEXIÓN/PERMISOS!", error);
+        });
+        // ========== FIN DEL CÓDIGO DE PRUEBA ==========
+      } else {
+        alert("No estás autenticado. Redirigiendo...");
+        window.location.href = "index.html";
+      }
+    });
+
+    function parseFecha(str) {
+      try {
+        if (!str || typeof str !== "string") return null;
+        // Formatos soportados: "dd/mm/yyyy hh:mm:ss" o "dd/mm/yyyy"
+        const [fecha, hora = "00:00:00"] = str.trim().split(" ");
+        const [dia, mes, anio] = fecha.split("/").map(v => v.padStart(2,"0"));
+        const h = hora.split(":");
+        while (h.length < 3) h.push("00");
+        const [hh, mm, ss] = h;
+        const iso = `${anio}-${mes}-${dia}T${hh}:${mm}:${ss}`;
+        const d = new Date(iso);
+        return isNaN(d.getTime()) ? null : d;
+      } catch {
+        return null;
+      }
+    }
+
+    function pad2(n){ return n.toString().padStart(2,"0"); }
+    function formatFecha(d) {
+      return `${pad2(d.getDate())}/${pad2(d.getMonth()+1)}/${d.getFullYear()} ${pad2(d.getHours())}:${pad2(d.getMinutes())}:${pad2(d.getSeconds())}`;
+    }
+    function prepararComprobante(datos) {
+      ultimoComprobante = datos;
+      if (receiptBanner) {
+        receiptBanner.hidden = false;
+      }
+      if (receiptMessage && typeof datos?.tipo === "string") {
+        receiptMessage.textContent = `Último comprobante: ${datos.tipo}.`;
+      }
+    }
+
+    function abrirComprobante(datos) {
+      const comprobante = datos || ultimoComprobante;
+      if (!comprobante) {
+        alert("No hay comprobante disponible.");
+        return;
+      }
+
+      const popup = window.open("", "_blank", "width=520,height=720");
+      if (!popup) {
+        alert("No se pudo abrir el comprobante. Permite las ventanas emergentes e inténtalo nuevamente.");
+        return;
+      }
+
+      popup.document.write(generarComprobanteHTML(comprobante));
+      popup.document.close();
+    }
+
+    function generarComprobanteHTML(datos) {
+      const safe = (value) => escapeHtml(typeof value === "string" ? value : value == null ? "" : String(value));
+      const rows = [
+        { label: "Correo", value: datos.correo ?? datos.usuario },
+        { label: "Contraseña", value: datos.password },
+        { label: "Vencimiento", value: datos.vencimiento }
+      ];
+
+      if (datos.creacion) {
+        rows.push({ label: "Creación", value: datos.creacion });
+      }
+
+      const rowsHtml = rows
+        .filter((row) => row.value != null && row.value !== "")
+        .map(row => `
+          <div class="row">
+            <span>${safe(row.label)}</span>
+            <strong>${safe(row.value)}</strong>
+          </div>
+        `)
+        .join("");
+
+      const detalleHtml = datos.detalle ? `<p class="note">${safe(datos.detalle)}</p>` : "";
+      const fechaOperacionHtml = datos.operacion ? `<p class="note"><strong>Fecha de emisión:</strong> ${safe(datos.operacion)}</p>` : "";
+
+      return `<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <title>Comprobante FEMON</title>
+  <style>
+    :root { color-scheme: light dark; }
+    body {
+      margin: 0;
+      font-family: 'Poppins', 'Segoe UI', sans-serif;
+      background: linear-gradient(165deg, #050924, #0a1438 45%, #020513 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 32px 16px;
+      color: #f5f7ff;
+    }
+    .receipt-card {
+      width: min(520px, 100%);
+      background: rgba(17, 24, 64, 0.92);
+      border-radius: 24px;
+      padding: 32px 28px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 25px 60px rgba(5, 12, 55, 0.45);
+    }
+    .receipt-card h1 {
+      margin: 18px 0 6px;
+      font-size: 1.6rem;
+    }
+    .receipt-type {
+      margin: 0 0 18px;
+      color: rgba(245, 247, 255, 0.75);
+      font-weight: 500;
+    }
+    .logo {
+      width: 160px;
+      height: auto;
+      display: block;
+    }
+    .info {
+      margin-top: 20px;
+      padding: 18px 20px;
+      border-radius: 18px;
+      background: rgba(9, 15, 56, 0.65);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+    .row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .row:last-child { border-bottom: none; }
+    .row span {
+      color: rgba(245, 247, 255, 0.75);
+      font-weight: 500;
+    }
+    .row strong {
+      font-weight: 600;
+      color: #ffe36d;
+      word-break: break-word;
+    }
+    .note {
+      margin: 14px 0 0;
+      color: rgba(245, 247, 255, 0.78);
+      font-size: 0.95rem;
+    }
+    .footer {
+      margin-top: 24px;
+      font-size: 0.85rem;
+      color: rgba(245, 247, 255, 0.6);
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="receipt-card">
+    <img src="femonplay-logo.png" alt="Logo de FEMON" class="logo" />
+    <h1>Comprobante</h1>
+    <p class="receipt-type">${safe(datos.tipo || "Operación")}</p>
+    ${detalleHtml}
+    ${fechaOperacionHtml}
+    <div class="info">
+      ${rowsHtml}
+    </div>
+    <p class="footer">¡Gracias por su preferencia!</p>
+  </div>
+</body>
+</html>`;
+    }
+
+    function escapeHtml(value) {
+      return value
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+    }
+    function ahoraAsuncion() {
+      return new Date(new Date().toLocaleString("en-US", { timeZone: "America/Asuncion" }));
+    }
+    function addMonthsPreservingDay(baseDate, months) {
+      const d = new Date(baseDate.getTime());
+      const originalDay = d.getDate();
+      const h = d.getHours(), m = d.getMinutes(), s = d.getSeconds();
+      const target = new Date(d.getFullYear(), d.getMonth(), d.getDate(), h, m, s);
+      const targetMonth = d.getMonth() + months;
+      target.setMonth(targetMonth);
+      if (target.getMonth() !== ((targetMonth % 12) + 12) % 12) {
+        return new Date(target.getFullYear(), ((targetMonth % 12) + 12) % 12 + 1, 0, h, m, s);
+      }
+      if (target.getDate() !== originalDay) {
+        return new Date(target.getFullYear(), target.getMonth() + 1, 0, h, m, s);
+      }
+      return target;
+    }
+
+    async function cargarUsuarios() {
+      const snap = await get(ref(database, "usuarios"));
+      usuariosData = [];
+      if (!snap.exists()) {
+        listaUsuarios.innerHTML = "<p>No se encontraron usuarios.</p>";
+        return;
+      }
+      const all = snap.val();
+      for (const uid in all) {
+        const u = all[uid];
+        // Incluir bloqueados: si tiene email O mailblock, y pertenece al admin
+        if (u && u.idv === adminUID && (u.email || u.mailblock)) {
+          const creacion = parseFecha(u.creacion);
+          // Compat: algunos nodos usan diferentes claves para vencimiento
+          const vencStr = u.benzymyentou || u.benzymaentou || u.vencimiento || u.vto || null;
+          const vencimiento = parseFecha(vencStr);
+          const isDemo = (creacion && vencimiento) ? ((vencimiento - creacion) < (5 * 60 * 60 * 1000)) : false;
+
+          const rawEmail = u.email || null;
+          const mailblock = u.mailblock || null;
+          const displayEmail = rawEmail || mailblock || "";
+          const bloqueado = !!mailblock && !rawEmail;
+
+          usuariosData.push({
+            uid,
+            email: rawEmail,
+            mailblock,
+            displayEmail,
+            bloqueado,
+            password: u.password || "",
+            creacion,
+            vencimiento,
+            isDemo
+          });
+        }
+      }
+      const filtroInicial = obtenerFiltroDesdeUrl() || filtroActual || "todos";
+      const botonInicial = filtrosDisponibles[filtroInicial] || btnTodos;
+      const activo = document.querySelector(".filtros button.active");
+      if (activo?.id === botonInicial.id) {
+        renderUsuarios(filtroInicial);
+      } else {
+        botonInicial.click();
+      }
+    }
+
+    function renderUsuarios(filtro) {
+      filtroActual = filtro;
+      listaUsuarios.innerHTML = "";
+      const now = ahoraAsuncion();
+      const ms3d = 3 * 24 * 60 * 60 * 1000;
+
+      let selYear = null, selMonth = null, selDia = null;
+      if (mesVencidos.value) {
+        const [y,m] = mesVencidos.value.split("-");
+        selYear = parseInt(y,10);
+        selMonth = parseInt(m,10);
+      }
+      selDia = parseInt(diaVencidos.value, 10) || null;
+
+      const q = buscarCorreo.value.toLowerCase();
+
+      const filtrados = usuariosData
+        .filter(u => {
+          const exp = u.vencimiento;
+          if (!exp) return false;
+          const diff = exp - now;
+          let ok;
+          switch (filtro) {
+            case "activos": ok = diff > 0; break;
+            case "porVencer": ok = diff > 0 && diff <= ms3d; break;
+            case "vencidos": ok = diff <= 0; break;
+            case "demo": ok = u.isDemo === true; break;
+            default: ok = true;
+          }
+          if (!ok) return false;
+
+          if (filtro === "vencidos" && selYear && selMonth) {
+            if (selDia) {
+              return exp.getFullYear() === selYear && (exp.getMonth()+1) === selMonth && exp.getDate() === selDia;
+            }
+            return exp.getFullYear() === selYear && (exp.getMonth()+1) === selMonth;
+          }
+          return true;
+        })
+        .filter(u => (u.displayEmail || "").toLowerCase().includes(q));
+
+      if (!filtrados.length) {
+        listaUsuarios.innerHTML = "<p>No hay usuarios para ese filtro.</p>";
+        return;
+      }
+
+      filtrados.forEach(u => {
+        const div = document.createElement("div");
+        const nowLocal = ahoraAsuncion();
+        const diff = u.vencimiento - nowLocal;
+        if (diff <= 0) div.classList.add("usuario", "vencido");
+        else if (diff <= (3*24*60*60*1000)) div.classList.add("usuario", "por-vencer");
+        else div.classList.add("usuario");
+
+        const row = document.createElement("div");
+        row.className = "user-row";
+
+        /* ===== Bloque de detalles (todo junto) ===== */
+        const details = document.createElement("div");
+        details.className = "user-details";
+
+        const emailP = document.createElement("p");
+        emailP.style.margin = "0";
+        emailP.textContent = `Correo: ${u.displayEmail}`;
+        if (u.isDemo) {
+          const dot = document.createElement("span");
+          dot.className = "dot-demo";
+          dot.title = "Cuenta demo";
+          emailP.appendChild(document.createTextNode(" "));
+          emailP.appendChild(dot);
+
+          const tag = document.createElement("span");
+          tag.className = "tag";
+          tag.textContent = "Demo";
+          emailP.appendChild(document.createTextNode(" "));
+          emailP.appendChild(tag);
+        }
+        if (u.bloqueado) {
+          const tagB = document.createElement("span");
+          tagB.className = "tag locked";
+          tagB.textContent = "Bloqueado";
+          emailP.appendChild(document.createTextNode(" "));
+          emailP.appendChild(tagB);
+        }
+
+        const vencP = document.createElement("p");
+        vencP.style.margin = "0";
+        vencP.textContent = `Vencimiento: ${u.vencimiento ? formatFecha(u.vencimiento) : "Inválida"}`;
+
+        const passP = document.createElement("p");
+        passP.style.margin = "0";
+        passP.textContent = `Contraseña: ${u.password || ""}`;
+
+        const creP = document.createElement("p");
+        creP.style.margin = "0";
+        creP.textContent = `Creación: ${u.creacion ? formatFecha(u.creacion) : "Inválida"}`;
+
+        details.appendChild(emailP);
+        details.appendChild(vencP);
+        details.appendChild(passP);
+        details.appendChild(creP);
+
+        /* ===== Acciones ===== */
+        const actions = document.createElement("div");
+        actions.className = "user-actions";
+
+        const btnBlock = document.createElement("button");
+        if (u.bloqueado) {
+          btnBlock.textContent = "Desbloquear";
+          btnBlock.className = "accent";
+          btnBlock.addEventListener("click", () => desbloquearUsuario(u.uid));
+        } else {
+          btnBlock.textContent = "Bloquear";
+          btnBlock.className = "danger";
+          btnBlock.addEventListener("click", () => bloquearUsuario(u.uid));
+        }
+
+        const btnCopy = document.createElement("button");
+        btnCopy.textContent = "Copiar Usuario";
+        btnCopy.className = "ghost";
+        btnCopy.addEventListener("click", () => copiarUsuario(u.displayEmail, u.password));
+
+        const btnReceipt = document.createElement("button");
+        btnReceipt.textContent = "Crear comprobante";
+        btnReceipt.className = "ghost";
+        btnReceipt.addEventListener("click", () => generarComprobante(u.displayEmail, u.password, u.vencimiento));
+
+        /* === NUEVO: botón de acción directa para cambiar contraseña === */
+        const btnCambiarPw = document.createElement("button");
+        btnCambiarPw.textContent = "Cambiar Contraseña";
+        btnCambiarPw.className = "ghost";
+        btnCambiarPw.addEventListener("click", () => cambiarPasswordAuth(u.uid, u.displayEmail));
+
+        const btnMore = document.createElement("button");
+        btnMore.textContent = "⋯";
+        btnMore.title = "Más acciones";
+        btnMore.addEventListener("click", (e) => mostrarOpciones(e, u));
+
+        actions.appendChild(btnBlock);
+        actions.appendChild(btnCopy);
+        actions.appendChild(btnReceipt);
+        actions.appendChild(btnCambiarPw); /* ← añadido */
+        actions.appendChild(btnMore);
+
+        /* ===== Ensamblado ===== */
+        row.appendChild(details);
+        row.appendChild(actions);
+
+        const hr = document.createElement("hr");
+        hr.style.border = "none";
+        hr.style.borderTop = "1px solid #eef2f7";
+        hr.style.margin = ".4em 0 0";
+
+        const container = document.createElement("div");
+        container.appendChild(row);
+        container.appendChild(hr);
+
+        /* Menú contextual */
+        container.addEventListener("contextmenu", e => mostrarOpciones(e, u));
+
+        div.appendChild(container);
+        listaUsuarios.appendChild(div);
+      });
+    }
+
+    // Botones de filtro
+    [btnTodos, btnActivos, btnPorVencer, btnVencidos, btnDemo].forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".filtros button").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+
+        if (btn.id === "btnVencidos") {
+          mesVencidos.style.display = "inline-block";
+        } else {
+          mesVencidos.value = "";
+          mesVencidos.style.display = "none";
+          diaVencidos.value = "";
+          diaVencidos.style.display = "none";
+        }
+        const filtro = filtroPorBoton[btn.id] || "todos";
+        actualizarHash(filtro);
+        renderUsuarios(filtro);
+      });
+    });
+
+    mesVencidos.addEventListener("change", () => {
+      if (document.querySelector(".filtros button.active").id === "btnVencidos") {
+        if (mesVencidos.value) {
+          diaVencidos.style.display = "inline-block";
+        } else {
+          diaVencidos.value = "";
+          diaVencidos.style.display = "none";
+        }
+        renderUsuarios("vencidos");
+      }
+    });
+
+    diaVencidos.addEventListener("input", () => {
+      if (document.querySelector(".filtros button.active").id === "btnVencidos") {
+        renderUsuarios("vencidos");
+      }
+    });
+
+    buscarCorreo.addEventListener("input", () => {
+      const activo = document.querySelector(".filtros button.active").id;
+      const filtro = filtroPorBoton[activo] || "todos";
+      renderUsuarios(filtro);
+    });
+
+    // ==== Menú contextual y acciones ====
+    function crearBotonMenu(texto, clase, handler) {
+      const b = document.createElement("button");
+      if (clase) b.className = clase;
+      b.textContent = texto;
+      b.addEventListener("click", handler);
+      return b;
+    }
+
+    function mostrarOpciones(e, u) {
+      e.preventDefault();
+      document.querySelectorAll(".menu-contextual").forEach(m => m.remove());
+
+      const menu = document.createElement("div");
+      menu.classList.add("menu-contextual");
+      menu.setAttribute("role", "dialog");
+      menu.setAttribute("aria-label", "Acciones disponibles");
+      menu.tabIndex = -1;
+
+      const titulo = document.createElement("h4");
+      titulo.textContent = "Acciones";
+      menu.appendChild(titulo);
+
+      // Toggle Bloquear/Desbloquear
+      if (u.bloqueado) {
+        menu.appendChild(crearBotonMenu("Desbloquear usuario", "accent", () => { desbloquearUsuario(u.uid); menu.remove(); }));
+      } else {
+        menu.appendChild(crearBotonMenu("Bloquear usuario", "danger", () => { bloquearUsuario(u.uid); menu.remove(); }));
+      }
+
+      const sub = document.createElement("h4");
+      sub.textContent = "Renovar (consume créditos)";
+      sub.style.marginTop = "0";
+      sub.style.fontWeight = "600";
+      menu.appendChild(sub);
+
+      const group = document.createElement("div");
+      group.className = "group";
+      group.appendChild(crearBotonMenu("1 mes (-1)", "accent", () => { close(); renovarCuenta(u.uid, 1); }));
+      group.appendChild(crearBotonMenu("3 meses (-3)", "accent", () => { close(); renovarCuenta(u.uid, 3); }));
+      group.appendChild(crearBotonMenu("6 meses (-6)", "accent", () => { close(); renovarCuenta(u.uid, 6); }));
+      group.appendChild(crearBotonMenu("12 meses (-12)", "accent", () => { close(); renovarCuenta(u.uid, 12); }));
+      menu.appendChild(group);
+
+      menu.appendChild(crearBotonMenu("Reiniciar Device ID", "", () => { close(); eliminarDeviceID(u.uid); }));
+      menu.appendChild(crearBotonMenu("Copiar Usuario", "", () => { copiarUsuario(u.displayEmail, u.password); close(); }));
+      menu.appendChild(crearBotonMenu("Crear comprobante", "", () => { generarComprobante(u.displayEmail, u.password, u.vencimiento); close(); }));
+
+      /* === NUEVO: acción en menú contextual para cambiar contraseña (Auth) === */
+      menu.appendChild(crearBotonMenu("Cambiar contraseña (Auth)", "", () => { cambiarPasswordAuth(u.uid, u.displayEmail); close(); }));
+
+      menu.appendChild(crearBotonMenu("Eliminar Cuenta", "danger", () => { close(); eliminarCuenta(u.uid); }));
+
+      const point = e.touches?.[0] || e;
+      let x = typeof point?.clientX === "number" ? point.clientX : 16;
+      let y = typeof point?.clientY === "number" ? point.clientY : 16;
+      menu.style.left = `${x}px`;
+      menu.style.top = `${y}px`;
+
+      document.body.appendChild(menu);
+
+      requestAnimationFrame(() => {
+        const rect = menu.getBoundingClientRect();
+        const vw = window.innerWidth;
+        const vh = window.innerHeight;
+        let newX = x;
+        let newY = y;
+        if (newX + rect.width > vw - 12) newX = Math.max(12, vw - rect.width - 12);
+        if (newY + rect.height > vh - 12) newY = Math.max(12, vh - rect.height - 12);
+        menu.style.left = `${newX}px`;
+        menu.style.top = `${newY}px`;
+        menu.focus({ preventScroll: true });
+      });
+
+      const handleKey = (evt) => {
+        if (evt.key === "Escape") {
+          close();
+        }
+      };
+
+      const handleOutside = (evt) => {
+        if (!menu.contains(evt.target)) {
+          close();
+        }
+      };
+
+      const close = () => {
+        menu.remove();
+        document.removeEventListener("click", handleOutside, true);
+        window.removeEventListener("blur", close);
+        window.removeEventListener("resize", close);
+        document.removeEventListener("keydown", handleKey);
+      };
+
+      setTimeout(() => {
+        document.addEventListener("click", handleOutside, true);
+        window.addEventListener("blur", close);
+        window.addEventListener("resize", close);
+        document.addEventListener("keydown", handleKey);
+      }, 0);
+    }
+
+    // === Créditos (transacción sobre PADRE + fallback no atómico) ===
+    async function descontarCreditosPorMeses(needed = 1) {
+      const adminNodeRef = ref(database, `Admin/${adminUID}`);
+      try {
+        const res = await runTransaction(
+          adminNodeRef,
+          (current) => {
+            if (!current || typeof current !== "object") return; // abort si falta el nodo
+            const cur = Number(current.limiteUsuarios);
+            if (!Number.isFinite(cur)) return;   // abort si NaN
+            if (cur < needed) return;            // abort si insuficiente
+            return { ...current, limiteUsuarios: cur - needed };
+          },
+          { applyLocally: false }
+        );
+
+        if (res.committed) {
+          const v = res.snapshot?.val()?.limiteUsuarios;
+          return { ok: true, newValue: Number(v) };
+        }
+        const latestObj = res.snapshot?.val();
+        const latest = latestObj?.limiteUsuarios;
+        if (!Number.isFinite(Number(latest))) {
+          return { ok: false, reason: "MISSING_OR_NAN", latest };
+        }
+        return { ok: false, reason: "INSUFFICIENT", latest: Number(latest) };
+      } catch (e) {
+        // Fallback: GET + UPDATE (no atómico, pero garantiza funcionamiento)
+        try {
+          const s = await get(adminNodeRef);
+          if (!s.exists()) return { ok: false, reason: "MISSING_OR_NAN", latest: null };
+          const cur = Number(s.val()?.limiteUsuarios);
+          if (!Number.isFinite(cur)) return { ok: false, reason: "MISSING_OR_NAN", latest: s.val()?.limiteUsuarios };
+          if (cur < needed) return { ok: false, reason: "INSUFFICIENT", latest: cur };
+          await update(adminNodeRef, { limiteUsuarios: cur - needed });
+          return { ok: true, newValue: cur - needed, fallback: true };
+        } catch (e2) {
+          return { ok: false, reason: "TX_ERROR", error: e2?.message || String(e2) };
+        }
+      }
+    }
+
+    async function reembolsarCreditos(amt = 1) {
+      const adminNodeRef = ref(database, `Admin/${adminUID}`);
+      try {
+        const res = await runTransaction(
+          adminNodeRef,
+          (current) => {
+            const base = (current && typeof current === "object") ? current : {};
+            const cur = Number(base.limiteUsuarios);
+            const next = Number.isFinite(cur) ? cur + amt : amt;
+            return { ...base, limiteUsuarios: next };
+          },
+          { applyLocally: false }
+        );
+        return { ok: true, newValue: Number(res.snapshot?.val()?.limiteUsuarios) };
+      } catch (e) {
+        // Fallback de reembolso
+        try {
+          const s = await get(adminNodeRef);
+          const base = (s.exists() && typeof s.val() === "object") ? s.val() : {};
+          const cur = Number(base.limiteUsuarios);
+          const next = Number.isFinite(cur) ? cur + amt : amt;
+          await update(adminNodeRef, { limiteUsuarios: next });
+          return { ok: true, newValue: next, fallback: true };
+        } catch (e2) {
+          return { ok: false, reason: "TX_ERROR", error: e2?.message || String(e2) };
+        }
+      }
+    }
+
+    async function renovarCuenta(uid, meses) {
+      try {
+        if (![1, 3, 6, 12].includes(meses)) {
+          alert("Meses inválidos.");
+          return;
+        }
+
+        const etiqueta = meses === 1 ? "1 mes" : `${meses} meses`;
+        if (!confirmarAccion(`¿Deseas renovar la cuenta por ${etiqueta}? Se descontarán ${meses} crédito(s).`)) {
+          return;
+        }
+
+        const adminCreditosRef = ref(database, `Admin/${adminUID}/limiteUsuarios`);
+
+        // --- LÓGICA DE "TRANSACCIÓN MANUAL" ---
+
+        // 1. LEEMOS EL VALOR ACTUAL (sabemos que esto funciona)
+        const snapshot = await get(adminCreditosRef);
+        if (!snapshot.exists()) {
+          alert(`Error: No se encontró el campo de créditos en la base de datos.`);
+          return;
+        }
+        
+        const creditosActuales = Number(snapshot.val());
+        
+        if (creditosActuales < meses) {
+          alert(`Créditos insuficientes: tienes ${creditosActuales}, necesitas ${meses}.`);
+          return;
+        }
+
+        // 2. CALCULAMOS Y ESCRIBIMOS EL NUEVO VALOR DIRECTAMENTE CON set()
+        const nuevosCreditos = creditosActuales - meses;
+        await set(adminCreditosRef, nuevosCreditos);
+
+        // --- SI LLEGAMOS AQUÍ, LOS CRÉDITOS SE DESCONTARON CORRECTAMENTE ---
+        // 3. ACTUALIZAMOS AL USUARIO (lógica que ya tenías)
+        const uref = ref(database, `usuarios/${uid}`);
+        const usnap = await get(uref);
+
+        if (!usnap.exists()) {
+          // Reembolsamos si el usuario fue borrado en el último segundo
+          await set(adminCreditosRef, creditosActuales); 
+          alert("Usuario no encontrado. No se descontaron los créditos.");
+          return;
+        }
+        
+        const u = usnap.val();
+        const now = ahoraAsuncion();
+        const vencStr = u.benzymyentou || u.benzymaentou || u.vencimiento || u.vto || null;
+        const actualVenc = parseFecha(vencStr);
+        const base = (actualVenc && actualVenc.getTime() > now.getTime()) ? actualVenc : now;
+        const nuevoVenc = addMonthsPreservingDay(base, meses);
+        const nuevaCadena = formatFecha(nuevoVenc);
+
+        try {
+          await update(uref, { benzymyentou: nuevaCadena });
+        } catch (error) {
+          // Si falla la actualización final, devolvemos los créditos.
+          await set(adminCreditosRef, creditosActuales);
+          alert("Error al guardar la nueva fecha del usuario. Se evirtió el descuento de créditos.");
+          return;
+        }
+
+        prepararComprobante({
+          tipo: `Renovación ${etiqueta}`,
+          correo: u.email || u.mailblock || "Sin correo",
+          password: u.password || "No disponible",
+          vencimiento: nuevaCadena,
+          operacion: formatFecha(now),
+          detalle: `Renovación aplicada por ${etiqueta}.`
+        });
+
+        alert(`¡ÉXITO! Usuario renovado por ${meses} mes(es). Créditos restantes: ${nuevosCreditos}`);
+        cargarUsuarios();
+
+      } catch (error) {
+        console.error("Error inesperado en renovarCuenta:", error);
+        alert("Error inesperado al renovar. Revisa la consola para más detalles.");
+      }
+    }
+
+    async function eliminarDeviceID(uid) {
+      try {
+        await remove(ref(database, `usuarios/${uid}/deviceID`));
+        alert("Device ID eliminado.");
+        cargarUsuarios();
+      } catch {
+        alert("Error al eliminar Device ID.");
+      }
+    }
+
+    function copiarUsuario(email, pass) {
+      const ta = document.createElement("textarea");
+      ta.value = `Correo: ${email}\nContraseña: ${pass}`;
+      document.body.appendChild(ta);
+      ta.select();
+      const ok = document.execCommand("copy");
+      document.body.removeChild(ta);
+      ok ? alert("Copiado al portapapeles.") : alert("Error al copiar.");
+    }
+
+    function generarComprobante(email, pass, vencimiento) {
+      const correo = email || "Sin correo";
+      const password = pass || "No disponible";
+      const vencDate = (vencimiento instanceof Date) ? vencimiento : null;
+      const vencimientoTexto = (vencDate && !Number.isNaN(vencDate.getTime()))
+        ? formatFecha(vencDate)
+        : "Sin vencimiento";
+
+      const datos = {
+        tipo: "Datos de acceso",
+        correo,
+        password,
+        vencimiento: vencimientoTexto,
+        operacion: formatFecha(ahoraAsuncion()),
+        detalle: "Credenciales generadas para el usuario."
+      };
+
+      prepararComprobante(datos);
+      abrirComprobante(datos);
+    }
+
+    async function eliminarCuenta(uid) {
+      if (!confirmarAccion("¿Eliminar cuenta?")) return;
+      try {
+        await remove(ref(database, `usuarios/${uid}/email`));
+        alert("Cuenta eliminada (email).");
+        cargarUsuarios();
+      } catch {
+        alert("Error al eliminar cuenta.");
+      }
+    }
+
+    // === Bloquear/Desbloquear usuario (atómico) ===
+    async function bloquearUsuario(uid) {
+      try {
+        const uref = ref(database, `usuarios/${uid}`);
+        const res = await runTransaction(uref, (current) => {
+          if (!current) return current;
+          // Si ya está bloqueado, no hacer nada
+          if (current.mailblock && !current.email) return current;
+          // Sólo bloqueamos si existe email
+          if (current.email) {
+            current.mailblock = current.email; // guardar temporal
+            delete current.email;              // borrar campo email
+          }
+          return current;
+        });
+        if (res.committed) {
+          alert("Usuario bloqueado.");
+          cargarUsuarios();
+        } else {
+          alert("No se pudo bloquear (quizá ya estaba bloqueado o no existe email).");
+        }
+      } catch (e) {
+        alert("Error al bloquear usuario.");
+      }
+    }
+
+    async function desbloquearUsuario(uid) {
+      try {
+        const uref = ref(database, `usuarios/${uid}`);
+        const res = await runTransaction(uref, (current) => {
+          if (!current) return current;
+          // Desbloquear sólo si existe mailblock
+          if (current.mailblock) {
+            current.email = current.mailblock; // restaurar
+            delete current.mailblock;          // borrar temporal
+          }
+          return current;
+        });
+        if (res.committed) {
+          alert("Usuario desbloqueado.");
+          cargarUsuarios();
+        } else {
+          alert("No se pudo desbloquear (no había mailblock).");
+        }
+      } catch (e) {
+        alert("Error al desbloquear usuario.");
+      }
+    }
+
+    /* === NUEVO: cambiar contraseña en Firebase Auth mediante API protegida === */
+    async function cambiarPasswordAuth(uid, displayEmail) {
+      let nueva = prompt(`Nueva contraseña para\n${displayEmail || uid}:`);
+      if (!nueva) return;
+      nueva = nueva.trim();
+      if (nueva.length < 6) {
+        alert("La contraseña debe tener al menos 6 caracteres.");
+        return;
+      }
+      try {
+        const idTok = await auth.currentUser.getIdToken(true);
+        const r = await fetch("/api/changePassword", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + idTok
+          },
+          body: JSON.stringify({ uid, newPassword: nueva })
+        });
+        const j = await r.json().catch(()=> ({}));
+        if (!r.ok || !j.success) {
+          throw new Error(j.error || `HTTP ${r.status}`);
+        }
+        await update(ref(database, `usuarios/${uid}`), { password: nueva });
+        alert("Contraseña actualizada correctamente.");
+        cargarUsuarios();
+      } catch (err) {
+        alert("No se pudo cambiar: " + (err?.message || String(err)));
+      }
+    }
+
+    // Exponer funciones
+    window.renovarCuenta = renovarCuenta;
+    window.eliminarDeviceID = eliminarDeviceID;
+    window.copiarUsuario = copiarUsuario;
+    window.generarComprobante = generarComprobante;
+    window.eliminarCuenta = eliminarCuenta;
+    window.bloquearUsuario = bloquearUsuario;
+    window.desbloquearUsuario = desbloquearUsuario;
+    window.cambiarPasswordAuth = cambiarPasswordAuth; /* ← NUEVO: botón/función expuesta en window */
+
+    window.addEventListener("hashchange", () => aplicarFiltroDesdeUrl(true));
+  </script>
+</body>
+</html>

@@ -1,0 +1,107 @@
+/* Fondo general */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #000000; /* Fondo negro */
+    color: #ffffff; /* Texto blanco */
+    margin: 0;
+    padding: 0;
+    user-select: none; /* Deshabilitar la selección de texto en toda la página */
+}
+
+/* Contenedor principal */
+.card {
+    max-width: 800px;
+    margin: 20px auto;
+    background: rgba(255, 255, 255, 0.1); /* Fondo semi-transparente */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+/* Título principal */
+.card h1 {
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #ffffff; /* Texto blanco */
+}
+
+/* Campo de búsqueda */
+#buscarCorreo {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ffffff;
+    border-radius: 5px;
+    background-color: #222222; /* Fondo oscuro */
+    color: #ffffff; /* Texto blanco */
+}
+
+/* Usuarios */
+.usuario {
+    padding: 15px;
+    border-bottom: 1px solid #ffffff; /* Línea separadora blanca */
+    user-select: none; /* Deshabilitar la selección de texto en los contenedores de usuario */
+}
+
+.usuario p {
+    margin: 5px 0;
+}
+
+/* Menú contextual */
+.menu-contextual {
+    position: absolute;
+    background-color: #333; /* Fondo oscuro */
+    color: white; /* Texto blanco */
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    font-size: 16px; /* Tamaño de fuente predeterminado */
+    user-select: none; /* Deshabilitar la selección de texto en el menú contextual */
+}
+
+/* Botones dentro del menú contextual */
+.menu-contextual button {
+    display: block;
+    background: none;
+    border: none;
+    color: white;
+    padding: 10px 15px; /* Aumento el tamaño de los botones */
+    text-align: left;
+    cursor: pointer;
+    width: 100%;
+    font-size: 18px; /* Aumento del tamaño del texto en los botones */
+    user-select: none; /* Deshabilitar la selección de texto en los botones */
+}
+
+/* Hover para los botones del menú contextual */
+.menu-contextual button:hover {
+    background-color: #555; /* Fondo gris más claro al pasar el cursor */
+}
+
+/* Ajustes para dispositivos móviles */
+@media (max-width: 600px) {
+    .card {
+        padding: 10px;
+    }
+
+    #buscarCorreo {
+        padding: 8px;
+    }
+
+    .usuario p {
+        font-size: 16px; /* Aumento del tamaño de texto en dispositivos móviles */
+    }
+
+    .menu-contextual {
+        font-size: 18px; /* Aumento el tamaño del texto en el menú contextual */
+        padding: 15px; /* Ajusto el padding del menú contextual */
+    }
+
+    .menu-contextual button {
+        font-size: 20px; /* Aumento el tamaño de los botones */
+        padding: 15px 20px; /* Ajusto el tamaño de los botones */
+    }
+}

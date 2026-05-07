@@ -1,0 +1,137 @@
+body {
+    font-family: 'Poppins', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #f0f0f0;
+}
+
+.background {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    overflow: hidden;
+}
+
+.shape {
+    background-color: #6200ea;
+    height: 200px;
+    width: 200px;
+    position: absolute;
+    border-radius: 50%;
+    top: -50px;
+    left: -50px;
+    opacity: 0.6;
+}
+
+.shape:nth-child(2) {
+    top: auto;
+    bottom: -50px;
+    right: -50px;
+    left: auto;
+    opacity: 0.4;
+}
+
+form {
+    background-color: #ffffff;
+    border-radius: 10px;
+    padding: 30px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    width: 320px;
+}
+
+h3 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    color: #333;
+}
+
+input[type="email"],
+input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    outline: none;
+}
+
+input[type="email"]:focus,
+input[type="password"]:focus {
+    border-color: #6200ea;
+}
+
+button {
+    width: 100%;
+    background-color: #6200ea;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+button:hover {
+    background-color: #5b00d6;
+}
+
+.social {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.social .go,
+.social .fb {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48%;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    color: white;
+    font-weight: 500;
+}
+
+.social .go {
+    background-color: #db4437;
+}
+
+.social .fb {
+    background-color: #3b5998;
+}
+
+.social .go:hover {
+    background-color: #c23321;
+}
+
+.social .fb:hover {
+    background-color: #2d4373;
+}
+
+.form p {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 14px;
+    color: #555;
+}
+
+.form span a {
+    color: #6200ea;
+    text-decoration: none;
+}
+
+.form span a:hover {
+    text-decoration: underline;
+}
